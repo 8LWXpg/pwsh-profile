@@ -1,0 +1,2 @@
+generated/*
+!generated/generate.ps1

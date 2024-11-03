@@ -20,7 +20,7 @@ if ($Host.UI.RawUI.WindowSize.Height -lt 15 -or $Host.UI.RawUI.WindowSize.Width 
 } else {
 	Set-PSReadLineOption -PredictionViewStyle ListView
 }
-Set-PsFzfOption -PSReadlineChordProvider 'Ctrl+t' -PSReadlineChordReverseHistory F7 -TabExpansion
+Set-PsFzfOption -PSReadlineChordProvider 'Ctrl+t' -PSReadlineChordReverseHistory F7 -EnableAliasFuzzySetLocation
 
 Set-PSReadLineKeyHandler -Chord Ctrl+d -Function DeleteCharOrExit
 
@@ -28,5 +28,5 @@ $ProfileFolder = 'E:\ps1\profile'
 . "$ProfileFolder\keys.ps1"
 . "$ProfileFolder\scripts.ps1"
 . "$ProfileFolder\complete.ps1"
-. "$ProfileFolder\starship.ps1"
+Get-ChildItem $ProfileFolder\generated -Exclude generate.ps1 | ForEach-Object { . $_.FullName }
 Remove-Variable ProfileFolder
