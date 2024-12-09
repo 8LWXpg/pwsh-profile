@@ -7,20 +7,18 @@ using namespace Microsoft.PowerShell
 # is inserted to the command line without invoking. Multiple command selection
 # is supported, e.g. selected by Ctrl + Click.
 
-Set-PSReadLineKeyHandler -Key '"', "'" `
+Set-PSReadLineKeyHandler -Chord '"', "'" `
 	-BriefDescription SmartInsertQuote `
-	-LongDescription "Insert paired quotes if not already in a quote" `
+	-Description 'Insert paired quotes if not already in a quote' `
 	-ScriptBlock {
 	param($key, $arg)
 
 	$quote = $key.KeyChar
 
-	$selectionStart = $null
-	$selectionLength = $null
+	$selectionStart, $selectionLength = $null, $null
 	[PSConsoleReadLine]::GetSelectionState([ref]$selectionStart, [ref]$selectionLength)
 
-	$line = $null
-	$cursor = $null
+	$line, $cursor = $null, $null
 	[PSConsoleReadLine]::GetBufferState([ref]$line, [ref]$cursor)
 
 	# If text is selected, just quote it without any smarts
@@ -30,9 +28,7 @@ Set-PSReadLineKeyHandler -Key '"', "'" `
 		return
 	}
 
-	$ast = $null
-	$tokens = $null
-	$parseErrors = $null
+	$ast, $tokens, $parseErrors = $null, $null, $null
 	[PSConsoleReadLine]::GetBufferState([ref]$ast, [ref]$tokens, [ref]$parseErrors, [ref]$null)
 
 	function FindToken {
@@ -88,9 +84,9 @@ Set-PSReadLineKeyHandler -Key '"', "'" `
 	[PSConsoleReadLine]::Insert($quote)
 }
 
-Set-PSReadLineKeyHandler -Key '(', '{', '[' `
+Set-PSReadLineKeyHandler -Chord '(', '{', '[' `
 	-BriefDescription InsertPairedBraces `
-	-LongDescription "Insert matching braces" `
+	-Description 'Insert matching braces' `
 	-ScriptBlock {
 	param($key, $arg)
 
@@ -100,12 +96,10 @@ Set-PSReadLineKeyHandler -Key '(', '{', '[' `
 		'[' { ']' }
 	}
 
-	$selectionStart = $null
-	$selectionLength = $null
+	$selectionStart, $selectionLength = $null, $null
 	[PSConsoleReadLine]::GetSelectionState([ref]$selectionStart, [ref]$selectionLength)
 
-	$line = $null
-	$cursor = $null
+	$line, $cursor = $null, $null
 	[PSConsoleReadLine]::GetBufferState([ref]$line, [ref]$cursor)
 
 	if ($selectionStart -ne -1) {
@@ -119,14 +113,13 @@ Set-PSReadLineKeyHandler -Key '(', '{', '[' `
 	}
 }
 
-Set-PSReadLineKeyHandler -Key ')', ']', '}' `
+Set-PSReadLineKeyHandler -Chord ')', ']', '}' `
 	-BriefDescription SmartClosingBrace `
-	-LongDescription "Insert matching brace or move cursor past existing one" `
+	-Description 'Insert matching brace or move cursor past existing one' `
 	-ScriptBlock {
 	param($key, $arg)
 
-	$line = $null
-	$cursor = $null
+	$line, $cursor = $null, $null
 	[PSConsoleReadLine]::GetBufferState([ref]$line, [ref]$cursor)
 
 	if ($line[$cursor] -eq $key.KeyChar) {
@@ -136,14 +129,13 @@ Set-PSReadLineKeyHandler -Key ')', ']', '}' `
 	}
 }
 
-Set-PSReadLineKeyHandler -Key 'BackSpace' `
+Set-PSReadLineKeyHandler -Chord 'BackSpace' `
 	-BriefDescription DeletePair `
-	-LongDescription "Delete matching brace or quote" `
+	-Description 'Delete matching brace or quote' `
 	-ScriptBlock {
 	param($key, $arg)
 
-	$line = $null
-	$cursor = $null
+	$line, $cursor = $null, $null
 	[PSConsoleReadLine]::GetBufferState([ref]$line, [ref]$cursor)
 
 	if ($cursor -lt $line.Length -and $cursor -gt 0 -and $line.Substring($cursor - 1, 2) -in "''", '""', '()', '[]', '{}') {
@@ -151,4 +143,15 @@ Set-PSReadLineKeyHandler -Key 'BackSpace' `
 	} else {
 		[PSConsoleReadLine]::BackwardDeleteChar()
 	}
+}
+
+Set-PSReadLineKeyHandler -Chord 'Ctrl+e' `
+	-BriefDescription EncloseLine `
+	-Description 'Enclose line with parentheses' `
+	-ScriptBlock {
+	param($key, $arg)
+
+	$line, $cursor = $null, $null
+	[PSConsoleReadLine]::GetBufferState([ref]$line, [ref]$cursor)
+	[PSConsoleReadLine]::Replace(0, $line.Length, "($($line))")
 }
