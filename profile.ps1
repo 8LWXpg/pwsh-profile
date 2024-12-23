@@ -9,7 +9,6 @@ if ($temp.Count -gt 1 -and
 }
 Remove-Variable temp
 
-Import-Module gsudoModule
 Import-Module Terminal-Icons
 Import-Module Microsoft.WinGet.CommandNotFound
 Import-Module PSFzf
@@ -20,7 +19,7 @@ if ($Host.UI.RawUI.WindowSize.Height -lt 15 -or $Host.UI.RawUI.WindowSize.Width 
 } else {
 	Set-PSReadLineOption -PredictionViewStyle ListView
 }
-Set-PsFzfOption -PSReadlineChordProvider 'Ctrl+t' -PSReadlineChordReverseHistory F7 -EnableAliasFuzzySetLocation
+Set-PsFzfOption -PSReadlineChordProvider 'Ctrl+t' -PSReadlineChordReverseHistory 'Ctrl+r' -EnableAliasFuzzySetLocation
 
 Set-PSReadLineKeyHandler -Chord Ctrl+d -Function DeleteCharOrExit
 
