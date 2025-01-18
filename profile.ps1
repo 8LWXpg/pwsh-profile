@@ -67,5 +67,4 @@ $ProfileFolder = 'E:\ps1\profile'
 . "$ProfileFolder\keys.ps1"
 . "$ProfileFolder\scripts.ps1"
 . "$ProfileFolder\complete.ps1"
-Get-ChildItem $ProfileFolder\generated -Exclude generate.ps1 | ForEach-Object { . $_.FullName }
 Remove-Variable ProfileFolder
