@@ -15,8 +15,3 @@ Register-ArgumentCompleter -Native -CommandName dotnet -ScriptBlock {
 	}
 }
 #endregion
-
-Invoke-Expression ((gh completion -s powershell) -join "`n")
-Invoke-Expression ((zoxide init powershell) -join "`n")
-Invoke-Expression ((starship init powershell --print-full-init) -join "`n")
-Invoke-Expression ((uv generate-shell-completion powershell) -join "`n")
