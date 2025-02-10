@@ -2,11 +2,6 @@ using namespace System.Management.Automation
 using namespace System.Management.Automation.Language
 using namespace Microsoft.PowerShell
 
-# This key handler shows the entire or filtered history using Out-ConsoleGridView. The
-# typed text is used as the substring pattern for filtering. A selected command
-# is inserted to the command line without invoking. Multiple command selection
-# is supported, e.g. selected by Ctrl + Click.
-
 Set-PSReadLineKeyHandler -Chord '"', "'" `
 	-BriefDescription SmartInsertQuote `
 	-Description 'Insert paired quotes if not already in a quote' `
