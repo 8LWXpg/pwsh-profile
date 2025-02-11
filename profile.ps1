@@ -50,7 +50,6 @@ if ($temp.Count -gt 1 -and
 Remove-Variable temp
 
 Import-Module Terminal-Icons
-Import-Module Microsoft.WinGet.CommandNotFound
 Import-Module PSFzf
 
 Set-PSReadLineOption -PredictionSource History -EditMode Windows -HistoryNoDuplicates
