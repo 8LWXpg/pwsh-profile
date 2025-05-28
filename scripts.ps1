@@ -1,12 +1,3 @@
-# open folder with Explorer
-function e {
-	param (
-		[Parameter(ValueFromPipeline, Mandatory)]
-		[string]$path
-	)
-	explorer.exe (Resolve-Path $path).Path
-}
-
 # yazi
 function yy {
 	$tmp = [System.IO.Path]::GetTempFileName()

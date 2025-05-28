@@ -1,7 +1,6 @@
 # generate completion script instead of calling executable directly
 
-Set-Location $PSScriptRoot
-Push-Location
+Push-Location $PSScriptRoot
 
 gh completion -s powershell > gh.ps1
 zoxide init powershell > zoxide.ps1

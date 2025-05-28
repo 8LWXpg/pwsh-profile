@@ -49,10 +49,8 @@ if ($temp.Count -gt 1 -and
 }
 Remove-Variable temp
 
-#Import-Module Terminal-Icons
 Import-Module PSFzf
 
-#Set-PSReadLineOption -PredictionSource History -EditMode Windows -HistoryNoDuplicates
 if ($Host.UI.RawUI.WindowSize.Height -lt 15 -or $Host.UI.RawUI.WindowSize.Width -lt 54) {
 	Set-PSReadLineOption -PredictionViewStyle InlineView
 } else {
@@ -69,4 +67,3 @@ $ProfileFolder = 'E:\ps1\profile'
 Get-ChildItem $ProfileFolder\generated -Exclude generate.ps1, gh.ps1 | ForEach-Object { & $_.FullName }
 . $ProfileFolder\generated\gh.ps1
 Remove-Variable ProfileFolder
-
