@@ -15,3 +15,6 @@ Register-ArgumentCompleter -Native -CommandName dotnet -ScriptBlock {
 	}
 }
 #endregion
+
+$env:CARAPACE_BRIDGES = 'zsh,fish,bash,inshellisense' # optional
+(carapace _carapace) -join "`n" | Invoke-Expression
