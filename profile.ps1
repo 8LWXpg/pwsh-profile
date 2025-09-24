@@ -80,5 +80,4 @@ $ProfileFolder = 'E:\ps1\profile'
 . "$ProfileFolder\scripts.ps1"
 . "$ProfileFolder\complete.ps1"
 Get-ChildItem $ProfileFolder\generated -Exclude generate.ps1, gh.ps1 | ForEach-Object { & $_.FullName }
-. $ProfileFolder\generated\gh.ps1
 Remove-Variable ProfileFolder
