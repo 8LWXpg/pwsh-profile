@@ -59,7 +59,7 @@ if ($Host.UI.RawUI.WindowSize.Height -lt 15 -or $Host.UI.RawUI.WindowSize.Width 
 Set-PsFzfOption -PSReadlineChordProvider 'Ctrl+t' -PSReadlineChordReverseHistory 'Ctrl+r' -EnableAliasFuzzySetLocation
 
 Set-PSReadLineKeyHandler -Chord Ctrl+d -Function DeleteCharOrExit
-Set-PSReadlineKeyHandler -Key Tab -Function MenuComplete
+Set-PSReadLineKeyHandler -Key Tab -Function Complete
 
 $ProfileFolder = 'E:\ps1\profile'
 . "$ProfileFolder\keys.ps1"
