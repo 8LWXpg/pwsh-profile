@@ -56,6 +56,7 @@ if ($Host.UI.RawUI.WindowSize.Height -lt 15 -or $Host.UI.RawUI.WindowSize.Width 
 } else {
 	Set-PSReadLineOption -PredictionViewStyle ListView
 }
+Set-PSReadLineOption -BellStyle Visual
 Set-PsFzfOption -PSReadlineChordProvider 'Ctrl+t' -PSReadlineChordReverseHistory 'Ctrl+r' -EnableAliasFuzzySetLocation
 
 Set-PSReadLineKeyHandler -Chord Ctrl+d -Function DeleteCharOrExit
