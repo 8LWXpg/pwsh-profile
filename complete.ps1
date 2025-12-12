@@ -16,5 +16,8 @@ Register-ArgumentCompleter -Native -CommandName dotnet -ScriptBlock {
 }
 #endregion
 
-$env:CARAPACE_BRIDGES = 'zsh,fish,bash,inshellisense' # optional
+$env:CARAPACE_EXCLUDES = 'vi,vim,nvim'
+$env:CARAPACE_NOSPACE = '*'
+$env:CARAPACE_TOOLTIP = 1
+Set-PSReadLineOption -Colors @{ 'Selection' = "`e[7m" }
 (carapace _carapace) -join "`n" | Invoke-Expression
