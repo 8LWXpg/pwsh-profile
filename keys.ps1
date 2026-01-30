@@ -6,7 +6,7 @@ Set-PSReadLineKeyHandler -Chord '"', "'" `
 	-BriefDescription SmartInsertQuote `
 	-Description 'Insert paired quotes if not already in a quote' `
 	-ScriptBlock {
-	param($key, $arg)
+	param([System.ConsoleKeyInfo]$key, $arg)
 
 	$quote = $key.KeyChar
 
@@ -23,11 +23,11 @@ Set-PSReadLineKeyHandler -Chord '"', "'" `
 		return
 	}
 
-	$ast, $tokens, $parseErrors = $null, $null, $null
+	[Ast]$ast, [Token[]]$tokens, [ParseError[]]$parseErrors = $null, $null, $null
 	[PSConsoleReadLine]::GetBufferState([ref]$ast, [ref]$tokens, [ref]$parseErrors, [ref]$null)
 
 	function FindToken {
-		param($tokens, $cursor)
+		param([Token[]]$tokens, $cursor)
 
 		foreach ($token in $tokens) {
 			if ($cursor -lt $token.Extent.StartOffset) { continue }
@@ -49,6 +49,12 @@ Set-PSReadLineKeyHandler -Chord '"', "'" `
 
 	# If we're on or inside a **quoted** string token (so not generic), we need to be smarter
 	if ($token -is [StringToken] -and $token.Kind -ne [TokenKind]::Generic) {
+		# We're manually escaping a double quote, just insert the quote
+		if ($line[$cursor - 1] -eq '`' -and $quote -eq '"') {
+			[PSConsoleReadLine]::Insert('"')
+			return
+		}
+
 		# If we're at the start of the string, assume we're inserting a new string
 		if ($token.Extent.StartOffset -eq $cursor) {
 			[PSConsoleReadLine]::Insert("$quote$quote ")
@@ -64,7 +70,9 @@ Set-PSReadLineKeyHandler -Chord '"', "'" `
 	}
 
 	if ($null -eq $token -or
-		$token.Kind -eq [TokenKind]::RParen -or $token.Kind -eq [TokenKind]::RCurly -or $token.Kind -eq [TokenKind]::RBracket) {
+		$token.Kind -eq [TokenKind]::RParen -or
+		$token.Kind -eq [TokenKind]::RCurly -or
+		$token.Kind -eq [TokenKind]::RBracket) {
 		if ($line[0..$cursor].Where{ $_ -eq $quote }.Count % 2 -eq 1) {
 			# Odd number of quotes before the cursor, insert a single quote
 			[PSConsoleReadLine]::Insert($quote)
@@ -133,7 +141,9 @@ Set-PSReadLineKeyHandler -Chord 'BackSpace' `
 	$line, $cursor = $null, $null
 	[PSConsoleReadLine]::GetBufferState([ref]$line, [ref]$cursor)
 
-	if ($cursor -lt $line.Length -and $cursor -gt 0 -and $line.Substring($cursor - 1, 2) -in "''", '""', '()', '[]', '{}') {
+	if ($cursor -lt $line.Length -and
+		$cursor -gt 1 -and
+		$line.Substring($cursor - 1, 2) -in "''", '""', '()', '[]', '{}') {
 		[PSConsoleReadLine]::Delete($cursor - 1, 2)
 	} else {
 		[PSConsoleReadLine]::BackwardDeleteChar()
