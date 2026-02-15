@@ -50,6 +50,7 @@ if ($temp.Count -gt 1 -and
 Remove-Variable temp
 
 Import-Module PSFzf
+$env:FZF_DEFAULT_OPTS = '--height=50% --layout=reverse'
 
 if ($Host.UI.RawUI.WindowSize.Height -lt 15 -or $Host.UI.RawUI.WindowSize.Width -lt 54) {
 	Set-PSReadLineOption -PredictionViewStyle InlineView
