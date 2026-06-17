@@ -17,7 +17,18 @@ function sudo {
 				break
 			}
 			{ $_ -is [scriptblock] } {
-				$encoded = convertToBase64EncodedString $_
+				$sb = $_
+				$sbArgs = $args.Count -eq 1 ? @() : $args[1..($args.Count - 1)]
+
+				$argLiteral = $sbArgs | ForEach-Object {
+					if ($_ -is [string]) {
+						"'$($_ -replace "'", "''"  )'" 
+					} else {
+						$_ 
+					}
+				}
+
+				$encoded = convertToBase64EncodedString "& { $sb } $($argLiteral -join ' ')"
 				sudo.exe pwsh -e $encoded
 				break
 			}
@@ -37,6 +48,8 @@ function sudo {
 		}
 	}
 }
+
+Set-Alias edit E:\rs\edit\target\release\edit.exe
 
 # prevent loading profile in scripts
 $temp = ([System.Environment]::GetCommandLineArgs())
@@ -69,3 +82,5 @@ $ProfileFolder = 'E:\ps1\profile'
 . "$ProfileFolder\complete.ps1"
 Get-ChildItem $ProfileFolder\generated -Exclude generate.ps1, gh.ps1 | ForEach-Object { & $_.FullName }
 Remove-Variable ProfileFolder
+
+$env:UV_PYTHON='3.13'
