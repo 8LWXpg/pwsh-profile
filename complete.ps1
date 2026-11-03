@@ -22,4 +22,6 @@ $env:CARAPACE_TOOLTIP = 1
 Set-PSReadLineOption -Colors @{ 'Selection' = "`e[7m" }
 (carapace _carapace) -join "`n" | Invoke-Expression
 
+Import-Module '~\scoop\modules\scoop-completion'
+
 Set-Alias lg lazygit.exe
